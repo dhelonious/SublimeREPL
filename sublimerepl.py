@@ -516,7 +516,7 @@ class ReplManager(object):
             rv.call_on_close.append(self._delete_repl)
             self.repl_views[r.id] = rv
             view.set_scratch(True)
-            view.set_name("*REPL* [%s]" % (r.name(),))
+            view.set_name(view_id if view_id else "*REPL* [{}]".format(r.name()))
             return rv
         except Exception as e:
             traceback.print_exc()
