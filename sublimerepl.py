@@ -493,6 +493,16 @@ class ReplManager(object):
         try:
             kwds = ReplManager.translate(window, kwds)
             encoding = ReplManager.translate(window, encoding)
+
+            # expand build system variables
+            variables = window.extract_variables()
+            pattern = re.compile("\$(" + "|".join(variables) + ")")
+            for key, value in kwds.items():
+                print(key, value)
+                if not isinstance(value, str):
+                    continue
+                kwds[key] = pattern.sub(lambda match: variables[match.group(1)], value)
+
             r = repls.Repl.subclass(type)(encoding, **kwds)
             found = None
             for view in window.views():
