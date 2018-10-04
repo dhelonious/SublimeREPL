@@ -213,6 +213,10 @@ class ReplView(object):
             self._window.focus_view(oldview)
             self._window.focus_view(view)
 
+        # enter (neo)vintageous insert mode
+        if settings.get("vintageous_enter_insert_mode", False):
+            view.run_command("_enter_insert_mode")
+
         # begin refreshing attached view
         self.update_view_loop()
 
