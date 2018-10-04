@@ -213,6 +213,11 @@ class ReplView(object):
             self._window.focus_view(oldview)
             self._window.focus_view(view)
 
+        # enter (neo)vintageous insert mode
+        self.enter_insert_mode = settings.get("vintageous_enter_insert_mode")
+        if self.enter_insert_mode:
+            self._view.run_command("_enter_insert_mode")
+
         # begin refreshing attached view
         self.update_view_loop()
 
@@ -262,6 +267,11 @@ class ReplView(object):
         self.repl.close()
         for fun in self.call_on_close:
             fun(self)
+
+    def on_activated(self):
+        if self.enter_insert_mode:
+            # enter (neo)vintageous insert mode
+            self._view.run_command("_enter_insert_mode")
 
     def clear(self, edit):
         self.escape(edit)
@@ -448,7 +458,6 @@ class ReplView(object):
             if sel.begin() < output_end or sel.end() < output_end:
                 return False
         return True
-
 
 class ReplManager(object):
 
@@ -738,6 +747,12 @@ class ReplKillCommand(sublime_plugin.TextCommand):
 
 
 class SublimeReplListener(sublime_plugin.EventListener):
+
+    def on_activated(self, view):
+        rv = manager.repl_view(view)
+        if rv:
+            rv.on_activated()
+
     def on_selection_modified(self, view):
         rv = manager.repl_view(view)
         if rv:
