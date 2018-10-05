@@ -28,6 +28,7 @@
                     "cmd_postfix":"\n",
                     "autocomplete_server": true,
                     "external_id":"rails",
+                    "view_id": "*REPL* [rails]",
                     "syntax": "Packages/Ruby/Ruby.tmLanguage"
                   }
                 }
