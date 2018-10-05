@@ -498,7 +498,6 @@ class ReplManager(object):
             variables = window.extract_variables()
             pattern = re.compile("\$(" + "|".join(variables) + ")")
             for key, value in kwds.items():
-                print(key, value)
                 if not isinstance(value, str):
                     continue
                 kwds[key] = pattern.sub(lambda match: variables[match.group(1)], value)
