@@ -75,6 +75,25 @@ then type "SublimeREPL" and select the approperiate language.
 
 Note: <kbd>ctrl+,</kbd>, <kbd>f</kbd> means: press Ctrl and Comma, release all, press F.
 
+#### Project build systems
+
+In the following an example for a custom project-based build system is shown:
+```json
+      "build_system":
+      [
+            {
+                  "name": "Run Project in REPL",
+                  "target": "repl_open",
+                  "encoding": "utf8",
+                  "type": "subprocess",
+                  "view_id": "My Python Script",
+                  "cmd": ["python", "-u", "$project_path/Main.py"],
+                  "cwd": "$project_path",
+                  "external_id": "python",
+                  "extend_env": {"PYTHONIOENCODING": "utf-8"}
+            }
+      ]
+```
 
 License and Price
 =================
