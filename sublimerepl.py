@@ -496,7 +496,7 @@ class ReplManager(object):
 
             # expand build system variables
             variables = window.extract_variables()
-            pattern = re.compile("\$(" + "|".join(variables) + ")([^0-9a-zA-Z_]|$)")
+            pattern = re.compile("\$(" + "|".join(variables) + ")([^a-z_]|$)")
             for key, value in kwds.items():
                 if not isinstance(value, str):
                     continue
