@@ -116,7 +116,13 @@
 			{ "key": "setting.repl", "operator": "equal", "operand": true }
 		]
 	},
-	{ "keys": ["shift+ctrl+c"], "command": "subprocess_repl_send_signal", "args": {"signal": 2},  // sigint
+	{ "keys": ["f9"], "command": "subprocess_repl_send_signal", "args": {"signal": 2},  // sigint
+	"context":
+		[
+			{ "key": "setting.repl", "operator": "equal", "operand": true }
+		]
+	},
+	{ "keys": ["shift+ctrl+c"], "command": "repl_kill",
 	"context":
 		[
 			{ "key": "setting.repl", "operator": "equal", "operand": true }

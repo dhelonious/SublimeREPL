@@ -7,7 +7,7 @@
 			{ "key": "auto_complete_visible", "operator": "equal", "operand": false }
 		]
 	},
-	{ "keys": ["alt+p"], "command": "repl_view_previous",
+	{ "keys": ["ctrl+p"], "command": "repl_view_previous",
 	"context":
 		[
 			{ "key": "setting.history_arrows", "operator": "equal", "operand": false },
@@ -22,7 +22,7 @@
 			{ "key": "auto_complete_visible", "operator": "equal", "operand": false }
 		]
 	},
-	{ "keys": ["alt+n"], "command": "repl_view_next",
+	{ "keys": ["ctrl+n"], "command": "repl_view_next",
 	"context":
 		[
 			{ "key": "setting.history_arrows", "operator": "equal", "operand": false },
@@ -66,6 +66,20 @@
 			{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
 		]
 	},
+	{ "keys": ["super+backspace"], "command": "repl_super_backspace", "args": {},
+	"context":
+		[
+			{ "key": "setting.repl", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
+		]
+	},
+	{ "keys": ["alt+backspace"], "command": "repl_ctrl_backspace", "args": {},
+	"context":
+		[
+			{ "key": "setting.repl", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
+		]
+	},
 	{ "keys": ["left"], "command": "repl_left", "args": {},
 	"context":
 		[
@@ -73,6 +87,12 @@
 		]
 	},
 	{ "keys": ["home"], "command": "repl_home", "args": {},
+	"context":
+		[
+			{ "key": "setting.repl", "operator": "equal", "operand": true }
+		]
+	},
+	{ "keys": ["ctrl+a"], "command": "repl_home", "args": {},
 	"context":
 		[
 			{ "key": "setting.repl", "operator": "equal", "operand": true }
@@ -90,7 +110,19 @@
 			{ "key": "setting.repl", "operator": "equal", "operand": true }
 		]
 	},
-	{ "keys": ["shift+ctrl+c"], "command": "repl_clear",
+	{ "keys": ["ctrl+l"], "command": "repl_clear",
+	"context":
+		[
+			{ "key": "setting.repl", "operator": "equal", "operand": true }
+		]
+	},
+	{ "keys": ["f9"], "command": "subprocess_repl_send_signal", "args": {"signal": 2},  // sigint
+	"context":
+		[
+			{ "key": "setting.repl", "operator": "equal", "operand": true }
+		]
+	},
+	{ "keys": ["shift+ctrl+c"], "command": "repl_kill",
 	"context":
 		[
 			{ "key": "setting.repl", "operator": "equal", "operand": true }
