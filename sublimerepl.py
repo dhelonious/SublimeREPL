@@ -501,8 +501,6 @@ class ReplManager(object):
                 if not isinstance(value, str):
                     continue
                 kwds[key] = pattern.sub(lambda match: variables[match.group(1)], value)
-            print(variables)
-            print(kwds)
 
             r = repls.Repl.subclass(type)(encoding, **kwds)
             found = None
