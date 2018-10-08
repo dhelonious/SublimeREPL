@@ -73,7 +73,7 @@
                             "linux": ["python", "-u", "${packages}/SublimeREPL/config/Python/ipy_repl.py"],
                             "windows": ["python", "-u", "${packages}/SublimeREPL/config/Python/ipy_repl.py"]
                         },
-                        "cwd": "$file_path",
+                        "cwd": "$project_path",
                         "syntax": "Packages/Python/Python.tmLanguage",
                         "external_id": "python",
                         "view_id": "*REPL* [python]",
