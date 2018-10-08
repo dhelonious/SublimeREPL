@@ -484,6 +484,19 @@ class ReplManager(object):
                 yield rv
 
     def open(self, window, encoding, type, syntax=None, view_id=None, **kwds):
+
+        # expand build system variables
+        variables = window.extract_variables()
+        pattern = re.compile("\$(" + "|".join(variables) + ")([^a-z_]|$)")
+        def expandvars(kwds):
+            if isinstance(kwds, dict):
+                for key, value in kwds.items():
+                    if isinstance(value, str):
+                        kwds[key] = pattern.sub(lambda match: variables[match.group(1)], value)
+                    else:
+                        kwds[key] = expandvars(kwds[key])
+            return kwds
+
         repl_restart_args = {
             'encoding': encoding,
             'type': type,
@@ -491,17 +504,8 @@ class ReplManager(object):
         }
         repl_restart_args.update(kwds)
         try:
-            kwds = ReplManager.translate(window, kwds)
+            kwds = expandvars(ReplManager.translate(window, kwds))
             encoding = ReplManager.translate(window, encoding)
-
-            # expand build system variables
-            variables = window.extract_variables()
-            pattern = re.compile("\$(" + "|".join(variables) + ")([^a-z_]|$)")
-            for key, value in kwds.items():
-                if not isinstance(value, str):
-                    continue
-                kwds[key] = pattern.sub(lambda match: variables[match.group(1)], value)
-
             r = repls.Repl.subclass(type)(encoding, **kwds)
             found = None
             for view in window.views():
