@@ -134,26 +134,7 @@ class SubprocessRepl(Repl):
         return None
 
     def getenv(self, settings):
-        """Tries to get most appropriate environent, on windows
-           it's os.environ.copy, but on other system's we'll
-           try get values from login shell"""
-
-        getenv_command = settings.get("getenv_command")
-        if getenv_command and POSIX:
-            try:
-                output = subprocess.check_output(getenv_command)
-                lines = output.decode("utf-8", errors="replace").splitlines()
-                env = dict(line.split('=', 1)  for line in lines)
-                return env
-            except:
-                import traceback
-                traceback.print_exc()
-                error_message(
-                    "SublimeREPL: obtaining sane environment failed in getenv()\n"
-                    "Check console and 'getenv_command' setting \n"
-                    "WARN: Falling back to SublimeText environment")
-
-        # Fallback to environ.copy() if not on POSIX or sane getenv failed
+        """Returns Sublime Text environment."""
         return os.environ.copy()
 
     def env(self, env, extend_env, settings):
