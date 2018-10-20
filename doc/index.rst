@@ -10,7 +10,7 @@ connecting to a running remote interpreter (e.g. Clojure/Lein) though a telnet
 port.
 
 SublimeREPL has a built-in support for command history and transferring code
-from open buffers to the interpreters for evaluation, enabling interactive 
+from open buffers to the interpreters for evaluation, enabling interactive
 programming.
 
 .. note::
@@ -20,7 +20,7 @@ programming.
 Installation
 ------------
 
-Download `Package Control`__, select Install Package and pick SublimeREPL from the list of 
+Download `Package Control`__, select Install Package and pick SublimeREPL from the list of
 available packages. You should have Package Control anyway.
 
 __  http://wbond.net/sublime_packages/package_control
@@ -43,7 +43,7 @@ same result as picking it from *Tools > SublimeREPL* menu.
 .. image:: _static/palette.png
 
 .. [#] One of the most frequently reported errors is SublimeREPL not being able
-   to find interpreter executable, even if it's visible in your shell. There are several way to fix this problem that we'll discuss in FAQ. 
+   to find interpreter executable, even if it's visible in your shell. There are several way to fix this problem that we'll discuss in FAQ.
 
 You may now use a source buffer to either evaluate text from the buffer in
 the REPL or copy text over to the REPL without evaluation. For this to work,
@@ -79,9 +79,9 @@ REPL keys
 +---------------+---------------+----------------+----------------------------------+-------------------------------------------------+
 | Esc           | Esc           | Esc            | repl_escape                      | Clear REPL input                                |
 +---------------+---------------+----------------+----------------------------------+-------------------------------------------------+
-| Ctrl+l        | Ctrl+l        | Shift+Ctrl+c   | repl_clear                       | Clear REPL screen                               |
+| Ctrl+Shift+c  | Ctrl+Shift+c  | Shift+Ctrl+c   | repl_clear                       | Clear REPL screen                               |
 +---------------+---------------+----------------+----------------------------------+-------------------------------------------------+
-| Shift+Ctrl+c  | Shift+Ctrl+c  | *Unsupported*  | subprocess_repl_send_signal      | Send SIGINT to REPL                             |
+| Ctrl+c        | Ctrl+c        | Shift+c        | repl_kill                        | Kill REPL                                       |
 +---------------+---------------+----------------+----------------------------------+-------------------------------------------------+
 
 Source buffer keys
@@ -90,7 +90,7 @@ Source buffer keys
 .. important::
    The keybindings here use Ctrl+, as a prefix (C-, in emacs notation), meaning press Ctrl, press comma, release both. Pressing the
    prefix combination and then the letter will immediately send the target text into the REPL and *evaluate* it as if you pressed enter.
-   If you want to prevent evaluation and send the text for *editing* in the REPL, press Shift with the prefix combination. 
+   If you want to prevent evaluation and send the text for *editing* in the REPL, press Shift with the prefix combination.
 
 .. note::
     Default source buffer keys are identical on all platforms.
@@ -107,9 +107,9 @@ Source buffer keys
 | Ctrl+, l      | Send the current line to REPL                                                                                      |
 +---------------+--------------------------------------------------------------------------------------------------------------------+
 
-Language specific information 
+Language specific information
 -----------------------------
- 
+
 SublimeREPL's integration with a specific language includes language-specific
 main menu and palette options for REPL startup, keymaps, and special REPL
 extensions unique to the target language. An integration may contain several
@@ -127,10 +127,10 @@ Settings - User) so that we can find your lein binary::
 
     "default_extend_env": {"PATH": "{PATH}:/home/myusername/bin"}
 
-To start a REPL subprocess with Leiningen project environment, open your `project.clj` 
+To start a REPL subprocess with Leiningen project environment, open your `project.clj`
 and, while it is the current file, use the menu or the command palette to start the REPL.
 
-* In subprocess REPL mode, the REPL is launched as a subprocess of the editor. 
+* In subprocess REPL mode, the REPL is launched as a subprocess of the editor.
   This is the mode you should use right now.
 * The telnet mode no longer works because of the changes in Leiningen and nrepl.
 
@@ -181,7 +181,7 @@ Frequently Asked Questions
 
    Sublime is unable to locate the binary that is needed to launch your REPL in the search paths available to it. This is
    because the subprocess REPLs are launched, as, well, subprocesses of Sublime environment, which may be different from
-   your interactive environment, especially if your REPL is installed in a directory that is not in a system-wide path (e.g 
+   your interactive environment, especially if your REPL is installed in a directory that is not in a system-wide path (e.g
    `/usr/local/bin` or '/home/myusername` on Linux, `My Documents` on Windows etc)
 
    If the binary is not in your system path and you can't or won't change that, tweak SublimeREPL configuration::
@@ -195,7 +195,7 @@ Frequently Asked Questions
 **I'd like an interactive REPL for Foo and it is not supported, what do?**
 
    Chances are, you only need a minimal amount of work to add an integration, and necessary steps are described
-   here briefly. 
+   here briefly.
 
    If you already have an  interactive shell for Foo, you can use the subprocess
    REPL. For an example, see PHP or Lua integration in `config/PHP`.
@@ -212,7 +212,7 @@ SublimeREPL currently ships with support for the following languages:
 * Clojure
 * CoffeeScript
 * Elixir
-* Execnet Python 
+* Execnet Python
 * Erlang
 * F#
 * Groovy
@@ -237,15 +237,15 @@ SublimeREPL currently ships with support for the following languages:
 * Sublime internal REPL (?)
 * Tower (CoffeeScript)
 
-Structure of SublimeREPL 
+Structure of SublimeREPL
 ------------------------
 
 .. NOTE::
    If this is your first time dealing with Sublime plugins, you may find it a bit too magical. Basically,
    Sublime automatically scans plugin directories loads configuration files and plugin code without manual
-   intervention, and reloads them dynamically as soon as they change. The entry points to a plugin's code are its commands, 
+   intervention, and reloads them dynamically as soon as they change. The entry points to a plugin's code are its commands,
    which are Python objects that extend Sublime's standard command class. Sublime calls them when needed. There
-   is no initialization entry point or a "plugin loaded" callback or somesuch. 
+   is no initialization entry point or a "plugin loaded" callback or somesuch.
 
 Basics of language integration: configuration and launch commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -255,7 +255,7 @@ where needed, Python code. The configuration consists of:
 
 * Menu configuration files which specify the actual REPL object configuration
 * Command palette `configuration files <http://docs.sublimetext.info/en/latest/reference/command_palette.html>`_
-* Optional `keybinding configuration files <http://docs.sublimetext.info/en/latest/reference/key_bindings.html>`_ 
+* Optional `keybinding configuration files <http://docs.sublimetext.info/en/latest/reference/key_bindings.html>`_
 
 REPLs are started by SublimeREPL command `repl_open`. The command and its
 arguments is usually specified in the menu configuration file, and the other
@@ -280,7 +280,7 @@ The menu configuration file `config/Lua/Menu.sublime-menu` contains::
               "id": "SublimeREPL",
               "children":
               [
-                  {"command": "repl_open", 
+                  {"command": "repl_open",
                    "caption": "Lua",
                    "id": "repl_lua",
                    "mnemonic": "L",
@@ -290,10 +290,11 @@ The menu configuration file `config/Lua/Menu.sublime-menu` contains::
                       "cmd": ["lua", "-i"],
                       "cwd": "$file_path",
                       "external_id": "lua",
+                      "view_id": "*REPL* [lua]",
                       "syntax": "Packages/Lua/Lua.tmLanguage"
                       }
                   }
-              ]   
+              ]
           }]
       }
   ]
@@ -315,7 +316,7 @@ The command configuration file `config/Lua/Default.sublime-commands` looks like 
           "caption": "SublimeREPL: Lua",
           "command": "run_existing_window_command", "args":
           {
-              /* Note that both these arguments are used to identify the file above and 
+              /* Note that both these arguments are used to identify the file above and
                  load the REPL configuration from it
                */
               "id": "repl_lua",
@@ -360,7 +361,7 @@ There are three integrations that provide their own classes:
 * Class :class:`ExecnetRepl`. This is only used by Execnet Python integration
 * Class :class:`SublimePythonRepl`. A REPL over SublimeText's internal Python interpreter.
 
-All these can be found in the plugin's `repl/` subdirectory. 
+All these can be found in the plugin's `repl/` subdirectory.
 
 A REPL class is expected to provide a standard interface for SublimeREPL integration:
 
@@ -370,14 +371,14 @@ A REPL class is expected to provide a standard interface for SublimeREPL integra
    necessary. :class:`ReplManager` will set up a separate thread with a
    :class:`ReplReader` pump that keeps polling this method.
 
-.. py:method:: write_bytes(bytes)  
+.. py:method:: write_bytes(bytes)
 
    Write some bytes to REPL's outgoing stream. User input in the REPL view's
    command line will be delivered here.
 
 REPL initialization sequence
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
+
 * User interaction causes the execution of `repl_open` command. Its arguments are usually taken
   from a menu configuration file.
 * The open() method of ReplManager is called, where a Repl instance and a ReplView instance get created
@@ -385,13 +386,13 @@ REPL initialization sequence
 
 REPL manager
 ^^^^^^^^^^^^
- 
+
 Class :class:`ReplManager` is responsible for managing REPL instances
 (subclasses of :class:`Repl`). It initializes new REPLs by:
 
 * Creating REPL instances
 * Providing an instance of the Sublime view associated with the REPL by reusing an existing one, or creating a new one
-* Creating and remembering a named :class:`ReplView` instance that couples between the two. 
+* Creating and remembering a named :class:`ReplView` instance that couples between the two.
 
 REPL views
 ^^^^^^^^^^
@@ -402,8 +403,8 @@ the loops that read from, and write to, the REPL.
 
 * The incoming data *from* the REPL is read in a separate thread using
   :class:`ReplReader`, because read operations are assumed to be blocking
-* The outgoing data is written into the REPL by ReplView's method 
-  py:method:`update_view_loop`. This method is called by ReplView's constructor 
-  at the very end and, as long as the associated REPL object is alive, will reschedule 
+* The outgoing data is written into the REPL by ReplView's method
+  py:method:`update_view_loop`. This method is called by ReplView's constructor
+  at the very end and, as long as the associated REPL object is alive, will reschedule
   itself with Sublime's py:method:`set_timeout`.
 
