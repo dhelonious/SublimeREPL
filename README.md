@@ -1,11 +1,7 @@
 SublimeREPL for SublimeText (2 and 3)
 =====================================
 
-
-[![Stories in Ready](https://badge.waffle.io/wuub/SublimeREPL.png?label=ready)](http://waffle.io/wuub/SublimeREPL) 
-
-If you would like to donate to support SublimeREPL development, you can do so using [GitTip](https://www.gittip.com/wuub/) or [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4DGEPH7QAVHH6&lc=GB&item_name=SublimeREPL&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted). Someone willing to take care of documentation would also be very welcome :-)
-
+**Note:** This fork of SublimeREPL is customized to my own needs and differs from the original SublimeREPL.
 
 Features
 --------
@@ -100,7 +96,6 @@ License and Price
 =================
 
 Since version 1.2.0 SublimeREPL is licensed under GPL. Previous versions were licensed under BSD.
-If you're using SublimeREPL in commercial environment a donation is strongly encouraged ;-)
 
 Compatibility
 ================
