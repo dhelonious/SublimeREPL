@@ -536,11 +536,12 @@ class ReplManager(object):
                 sublime.error_message(repr(e))
 
         # get additional cmd args
-        if cmd_args:
+        if cmd_args or cmd_args == "":
+            preset = cmd_args if isinstance(cmd_args, str) else ""
             def on_done(arg):
                 kwds["cmd"] += [arg]
                 continue_(kwds)
-            window.show_input_panel("args:", "", on_done, None, None)
+            window.show_input_panel("args:", preset, on_done, None, None)
         else:
             continue_(kwds)
 
