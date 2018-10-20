@@ -110,7 +110,7 @@
 			{ "key": "setting.repl", "operator": "equal", "operand": true }
 		]
 	},
-	{ "keys": ["ctrl+l"], "command": "repl_clear",
+	{ "keys": ["ctrl+shift+c"], "command": "repl_clear",
 	"context":
 		[
 			{ "key": "setting.repl", "operator": "equal", "operand": true }
@@ -122,7 +122,7 @@
 			{ "key": "setting.repl", "operator": "equal", "operand": true }
 		]
 	},
-	{ "keys": ["shift+ctrl+c"], "command": "repl_kill",
+	{ "keys": ["ctrl+c"], "command": "repl_kill",
 	"context":
 		[
 			{ "key": "setting.repl", "operator": "equal", "operand": true }
