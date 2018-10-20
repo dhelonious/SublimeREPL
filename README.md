@@ -88,6 +88,7 @@ In the following an example for a custom project-based build system is shown:
                   "type": "subprocess",
                   "view_id": "My Python Script",
                   "cmd": ["python", "-u", "$project_path/Main.py"],
+                  "cmd_args": false,
                   "cwd": "$project_path",
                   "external_id": "python",
                   "extend_env": {"PYTHONIOENCODING": "utf-8"}

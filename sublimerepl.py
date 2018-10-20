@@ -7,6 +7,7 @@ from __future__ import absolute_import, unicode_literals, print_function, divisi
 import re
 import os
 import sys
+import time
 import os.path
 import threading
 import traceback
@@ -483,7 +484,7 @@ class ReplManager(object):
             if rvid == external_id or external_id in additional_scopes:
                 yield rv
 
-    def open(self, window, encoding, type, syntax=None, view_id=None, **kwds):
+    def open(self, window, encoding, type, syntax=None, view_id=None, cmd_args=False, **kwds):
 
         # expand build system variables
         variables = window.extract_variables()
@@ -497,33 +498,51 @@ class ReplManager(object):
                         kwds[key] = expandvars(kwds[key])
             return kwds
 
-        repl_restart_args = {
-            'encoding': encoding,
-            'type': type,
-            'syntax': syntax,
-        }
-        repl_restart_args.update(kwds)
-        try:
-            kwds = expandvars(ReplManager.translate(window, kwds))
-            encoding = ReplManager.translate(window, encoding)
-            r = repls.Repl.subclass(type)(encoding, **kwds)
-            found = None
-            for view in window.views():
-                if view.name() == view_id:
-                    found = view
-                    window.focus_view(found)
-                    break
-            view = found or window.new_file()
+        # ugly but working...
+        def continue_(kwds):
+            nonlocal encoding
+            nonlocal type
+            nonlocal syntax
+            nonlocal cmd_args
+            print("~~~~~~~ CMD:", kwds["cmd"])
 
-            rv = ReplView(view, r, syntax, repl_restart_args)
-            rv.call_on_close.append(self._delete_repl)
-            self.repl_views[r.id] = rv
-            view.set_scratch(True)
-            view.set_name(view_id if view_id else "*REPL* [{}]".format(r.name()))
-            return rv
-        except Exception as e:
-            traceback.print_exc()
-            sublime.error_message(repr(e))
+            repl_restart_args = {
+                'encoding': encoding,
+                'type': type,
+                'syntax': syntax,
+                'cmd_args': cmd_args,
+            }
+            repl_restart_args.update(kwds)
+            try:
+                kwds = expandvars(ReplManager.translate(window, kwds))
+                encoding = ReplManager.translate(window, encoding)
+                r = repls.Repl.subclass(type)(encoding, **kwds)
+                found = None
+                for view in window.views():
+                    if view.name() == view_id:
+                        found = view
+                        window.focus_view(found)
+                        break
+                view = found or window.new_file()
+
+                rv = ReplView(view, r, syntax, repl_restart_args)
+                rv.call_on_close.append(self._delete_repl)
+                self.repl_views[r.id] = rv
+                view.set_scratch(True)
+                view.set_name(view_id if view_id else "*REPL* [{}]".format(r.name()))
+                return rv
+            except Exception as e:
+                traceback.print_exc()
+                sublime.error_message(repr(e))
+
+        # get additional cmd args
+        if cmd_args:
+            def on_done(arg):
+                kwds["cmd"] += [arg]
+                continue_(kwds)
+            window.show_input_panel("args:", "", on_done, None, None)
+        else:
+            continue_(kwds)
 
     def restart(self, view, edit):
         repl_restart_args = view.settings().get("repl_restart_args")
