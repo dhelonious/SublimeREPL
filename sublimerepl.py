@@ -432,7 +432,7 @@ class ReplView(object):
 
     @property
     def output_region(self):
-        return sublime.Region(0, self._output_end - 2)
+        return sublime.Region(0, self._output_end)
 
     @property
     def user_input(self):
