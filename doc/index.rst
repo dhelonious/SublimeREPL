@@ -20,8 +20,8 @@ programming.
 Installation
 ------------
 
-Download `Package Control`__, select Install Package and pick SublimeREPL from the list of
-available packages. You should have Package Control anyway.
+Download `Package Control`__, select Install Package and pick SublimeREPL from
+the list of available packages. You should have Package Control anyway.
 
 __  http://wbond.net/sublime_packages/package_control
 
@@ -43,7 +43,8 @@ same result as picking it from *Tools > SublimeREPL* menu.
 .. image:: _static/palette.png
 
 .. [#] One of the most frequently reported errors is SublimeREPL not being able
-   to find interpreter executable, even if it's visible in your shell. There are several way to fix this problem that we'll discuss in FAQ.
+   to find interpreter executable, even if it's visible in your shell. There are
+   several way to fix this problem that we'll discuss in FAQ.
 
 You may now use a source buffer to either evaluate text from the buffer in
 the REPL or copy text over to the REPL without evaluation. For this to work,
@@ -88,9 +89,12 @@ Source buffer keys
 ^^^^^^^^^^^^^^^^^^
 
 .. important::
-   The keybindings here use Ctrl+, as a prefix (C-, in emacs notation), meaning press Ctrl, press comma, release both. Pressing the
-   prefix combination and then the letter will immediately send the target text into the REPL and *evaluate* it as if you pressed enter.
-   If you want to prevent evaluation and send the text for *editing* in the REPL, press Shift with the prefix combination.
+   The keybindings here use Ctrl+, as a prefix (C-, in emacs notation), meaning
+   press Ctrl, press comma, release both. Pressing the prefix combination and
+   then the letter will immediately send the target text into the REPL and
+   *evaluate* it as if you pressed enter. If you want to prevent evaluation and
+   send the text for *editing* in the REPL, press Shift with the prefix
+   combination.
 
 .. note::
     Default source buffer keys are identical on all platforms.
@@ -127,8 +131,9 @@ Settings - User) so that we can find your lein binary::
 
     "default_extend_env": {"PATH": "{PATH}:/home/myusername/bin"}
 
-To start a REPL subprocess with Leiningen project environment, open your `project.clj`
-and, while it is the current file, use the menu or the command palette to start the REPL.
+To start a REPL subprocess with Leiningen project environment, open your
+`project.clj` and, while it is the current file, use the menu or the command
+palette to start the REPL.
 
 * In subprocess REPL mode, the REPL is launched as a subprocess of the editor.
   This is the mode you should use right now.
@@ -155,14 +160,17 @@ Additional keybindings are available for Clojure:
 Python
 ^^^^^^
 
-Both stock Python and Execnet integrations support virtualenv. Various ways to work with Python, including PDB and IPython, are supported.
+Both stock Python and Execnet integrations support virtualenv. Various ways to
+work with Python, including PDB and IPython, are supported.
 
-For virtualenv created environments to be discoverable by SublimeREPL they should be created or symlinked in one of the following:
+For virtualenv created environments to be discoverable by SublimeREPL they
+should be created or symlinked in one of the following:
 
 * ~/.virtualenvs default for `virtualenvwrapper`__
 * ~/.venvs default for `venv`__
 
-Alternatively, more paths can be added to "python_virtualenv_paths" in the SublimeREPL configuration file.
+Alternatively, more paths can be added to "python_virtualenv_paths" in the
+SublimeREPL configuration file.
 
 __ https://bitbucket.org/dhellmann/virtualenvwrapper
 __ https://github.com/wuub/venv
@@ -172,19 +180,56 @@ Documentation contributions from a Python specialist are welcome.
 Configuration
 -------------
 
-The default SublimeREPL configuration documents all available configuration settings.
+The default SublimeREPL configuration documents all available configuration
+settings.
+
+Custom build systems
+--------------------
+
+SublimeREPL supports custom build systems with the ability to expand any Sublime
+Text build system variables. That makes for example project-based build systems
+for specific files possible. The file location can be specified in relation to
+the project file by using `$project_path`.
+
+A custom project-based build system may look like this::
+
+  {
+      "build_system":
+      [
+          {
+              "name": "Run Project in REPL",
+              "view_id": "My Python Script",
+              "cmd": ["python", "-u", "$project_path/Main.py"],
+              "cmd_args": false,
+              "cwd": "$project_path",
+              "target": "repl_open",
+              "type": "subprocess",
+              "encoding": "utf8",
+              "external_id": "python",
+              "extend_env": {"PYTHONIOENCODING": "utf-8"}
+          }
+      ]
+  }
+
+If the `cmd_args` option is set to `true` an input prompt will appear on opening
+a REPL, which can be used to pass command line arguments to the executed script.
+If `cmd_args` is set to a string, it will be used as preset.
 
 Frequently Asked Questions
 --------------------------
 
 **SublimeREPL can't launch the REPL process - OSError(2, 'No such file or directory'), how do I fix that?**
 
-   Sublime is unable to locate the binary that is needed to launch your REPL in the search paths available to it. This is
-   because the subprocess REPLs are launched, as, well, subprocesses of Sublime environment, which may be different from
-   your interactive environment, especially if your REPL is installed in a directory that is not in a system-wide path (e.g
-   `/usr/local/bin` or '/home/myusername` on Linux, `My Documents` on Windows etc)
+   Sublime is unable to locate the binary that is needed to launch your REPL in
+   the search paths available to it. This is because the subprocess REPLs are
+   launched, as, well, subprocesses of Sublime environment, which may be
+   different from your interactive environment, especially if your REPL is
+   installed in a directory that is not in a system-wide path (e.g
+   `/usr/local/bin` or '/home/myusername` on Linux, `My Documents` on Windows
+   etc)
 
-   If the binary is not in your system path and you can't or won't change that, tweak SublimeREPL configuration::
+   If the binary is not in your system path and you can't or won't change that,
+   tweak SublimeREPL configuration::
 
     {
      ...
@@ -194,8 +239,8 @@ Frequently Asked Questions
 
 **I'd like an interactive REPL for Foo and it is not supported, what do?**
 
-   Chances are, you only need a minimal amount of work to add an integration, and necessary steps are described
-   here briefly.
+   Chances are, you only need a minimal amount of work to add an integration,
+   and necessary steps are described here briefly.
 
    If you already have an  interactive shell for Foo, you can use the subprocess
    REPL. For an example, see PHP or Lua integration in `config/PHP`.
@@ -241,11 +286,13 @@ Structure of SublimeREPL
 ------------------------
 
 .. NOTE::
-   If this is your first time dealing with Sublime plugins, you may find it a bit too magical. Basically,
-   Sublime automatically scans plugin directories loads configuration files and plugin code without manual
-   intervention, and reloads them dynamically as soon as they change. The entry points to a plugin's code are its commands,
-   which are Python objects that extend Sublime's standard command class. Sublime calls them when needed. There
-   is no initialization entry point or a "plugin loaded" callback or somesuch.
+   If this is your first time dealing with Sublime plugins, you may find it a
+   bit too magical. Basically, Sublime automatically scans plugin directories
+   loads configuration files and plugin code without manual intervention, and
+   reloads them dynamically as soon as they change. The entry points to a
+   plugin's code are its commands, which are Python objects that extend
+   Sublime's standard command class. Sublime calls them when needed. There is no
+   initialization entry point or a "plugin loaded" callback or somesuch.
 
 Basics of language integration: configuration and launch commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -309,15 +356,16 @@ As you can see, the main way to launch a new REPL is the SublimeREPL command
 above) specifies the arguments for the command that are used to locate the
 desired REPL class and the settings for it so that it can be  spawned.
 
-The command configuration file `config/Lua/Default.sublime-commands` looks like this::
+The command configuration file `config/Lua/Default.sublime-commands` looks like
+this::
 
   [
       {
           "caption": "SublimeREPL: Lua",
           "command": "run_existing_window_command", "args":
           {
-              /* Note that both these arguments are used to identify the file above and
-                 load the REPL configuration from it
+              /* Note that both these arguments are used to identify the file
+                 above and load the REPL configuration from it
                */
               "id": "repl_lua",
               "file": "config/Lua/Main.sublime-menu"
@@ -359,11 +407,13 @@ There are three integrations that provide their own classes:
 
 * Class :class:`PowershellRepl`. This is only used by PowerShell integration.
 * Class :class:`ExecnetRepl`. This is only used by Execnet Python integration
-* Class :class:`SublimePythonRepl`. A REPL over SublimeText's internal Python interpreter.
+* Class :class:`SublimePythonRepl`. A REPL over SublimeText's internal Python
+  interpreter.
 
 All these can be found in the plugin's `repl/` subdirectory.
 
-A REPL class is expected to provide a standard interface for SublimeREPL integration:
+A REPL class is expected to provide a standard interface for SublimeREPL
+integration:
 
 .. py:method:: read_bytes()
 
@@ -379,10 +429,12 @@ A REPL class is expected to provide a standard interface for SublimeREPL integra
 REPL initialization sequence
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* User interaction causes the execution of `repl_open` command. Its arguments are usually taken
-  from a menu configuration file.
-* The open() method of ReplManager is called, where a Repl instance and a ReplView instance get created
-* Within the ReplView constructor, the read and write loops get started. The REPL is now alive.
+* User interaction causes the execution of `repl_open` command. Its arguments
+  are usually taken from a menu configuration file.
+* The open() method of ReplManager is called, where a Repl instance and a
+  ReplView instance get created
+* Within the ReplView constructor, the read and write loops get started. The
+  REPL is now alive.
 
 REPL manager
 ^^^^^^^^^^^^
@@ -391,8 +443,10 @@ Class :class:`ReplManager` is responsible for managing REPL instances
 (subclasses of :class:`Repl`). It initializes new REPLs by:
 
 * Creating REPL instances
-* Providing an instance of the Sublime view associated with the REPL by reusing an existing one, or creating a new one
-* Creating and remembering a named :class:`ReplView` instance that couples between the two.
+* Providing an instance of the Sublime view associated with the REPL by reusing
+  an existing one, or creating a new one
+* Creating and remembering a named :class:`ReplView` instance that couples
+  between the two.
 
 REPL views
 ^^^^^^^^^^
@@ -405,6 +459,5 @@ the loops that read from, and write to, the REPL.
   :class:`ReplReader`, because read operations are assumed to be blocking
 * The outgoing data is written into the REPL by ReplView's method
   py:method:`update_view_loop`. This method is called by ReplView's constructor
-  at the very end and, as long as the associated REPL object is alive, will reschedule
-  itself with Sublime's py:method:`set_timeout`.
-
+  at the very end and, as long as the associated REPL object is alive, will
+  reschedule itself with Sublime's py:method:`set_timeout`.

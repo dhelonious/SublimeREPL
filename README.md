@@ -75,21 +75,23 @@ Note: <kbd>ctrl+,</kbd>, <kbd>f</kbd> means: press Ctrl and Comma, release all, 
 
 In the following an example for a custom project-based build system is shown:
 ```json
-      "build_system":
-      [
-            {
-                  "name": "Run Project in REPL",
-                  "target": "repl_open",
-                  "encoding": "utf8",
-                  "type": "subprocess",
-                  "view_id": "My Python Script",
-                  "cmd": ["python", "-u", "$project_path/Main.py"],
-                  "cmd_args": false,
-                  "cwd": "$project_path",
-                  "external_id": "python",
-                  "extend_env": {"PYTHONIOENCODING": "utf-8"}
-            }
-      ]
+{
+    "build_system":
+    [
+        {
+            "name": "Run Project in REPL",
+            "view_id": "My Python Script",
+            "cmd": ["python", "-u", "$project_path/Main.py"],
+            "cmd_args": false,
+            "cwd": "$project_path",
+            "target": "repl_open",
+            "type": "subprocess",
+            "encoding": "utf8",
+            "external_id": "python",
+            "extend_env": {"PYTHONIOENCODING": "utf-8"}
+        }
+    ]
+}
 ```
 
 License and Price
