@@ -486,64 +486,46 @@ class ReplManager(object):
 
     def open(self, window, encoding, type, syntax=None, view_id=None, cmd_args=False, **kwds):
 
-        # expand build system variables
-        variables = window.extract_variables()
-        pattern = re.compile("\$(" + "|".join(variables) + ")([^a-z_]|$)")
-        def expandvars(kwds):
-            if isinstance(kwds, dict):
-                for key, value in kwds.items():
-                    if isinstance(value, str):
-                        kwds[key] = pattern.sub(lambda match: variables[match.group(1)], value)
-                    else:
-                        kwds[key] = expandvars(kwds[key])
-            return kwds
-
-        # ugly but working...
-        def continue_(kwds):
-            nonlocal encoding
-            nonlocal type
-            nonlocal syntax
-            nonlocal cmd_args
-            print("~~~~~~~ CMD:", kwds["cmd"])
-
-            repl_restart_args = {
-                'encoding': encoding,
-                'type': type,
-                'syntax': syntax,
-                'cmd_args': cmd_args,
-            }
-            repl_restart_args.update(kwds)
-            try:
-                kwds = expandvars(ReplManager.translate(window, kwds))
-                encoding = ReplManager.translate(window, encoding)
-                r = repls.Repl.subclass(type)(encoding, **kwds)
-                found = None
-                for view in window.views():
-                    if view.name() == view_id:
-                        found = view
-                        window.focus_view(found)
-                        break
-                view = found or window.new_file()
-
-                rv = ReplView(view, r, syntax, repl_restart_args)
-                rv.call_on_close.append(self._delete_repl)
-                self.repl_views[r.id] = rv
-                view.set_scratch(True)
-                view.set_name(view_id if view_id else "*REPL* [{}]".format(r.name()))
-                return rv
-            except Exception as e:
-                traceback.print_exc()
-                sublime.error_message(repr(e))
-
         # get additional cmd args
         if cmd_args or cmd_args == "":
-            preset = cmd_args if isinstance(cmd_args, str) else ""
-            def on_done(arg):
-                kwds["cmd"] += [arg]
-                continue_(kwds)
-            window.show_input_panel("args:", preset, on_done, None, None)
+            initial_text = cmd_args if isinstance(cmd_args, str) else ""
+            def on_done(args):
+                kwds["cmd"] += [args]
+                self._open(window, encoding, type, syntax, view_id, **kwds)
+            window.show_input_panel("args:", initial_text, on_done, None, None)
         else:
-            continue_(kwds)
+            self._open(window, encoding, type, syntax, view_id, **kwds)
+
+    def _open(self, window, encoding, type, syntax=None, view_id=None, cmd_args=False, **kwds):
+        repl_restart_args = {
+            'encoding': encoding,
+            'type': type,
+            'syntax': syntax,
+            'cmd_args': cmd_args,
+        }
+        repl_restart_args.update(kwds)
+        try:
+            kwds = ReplManager.translate(window, kwds)
+            kwds = ReplManager.expand_variables(window, kwds)
+            encoding = ReplManager.translate(window, encoding)
+            r = repls.Repl.subclass(type)(encoding, **kwds)
+            found = None
+            for view in window.views():
+                if view.name() == view_id:
+                    found = view
+                    window.focus_view(found)
+                    break
+            view = found or window.new_file()
+
+            rv = ReplView(view, r, syntax, repl_restart_args)
+            rv.call_on_close.append(self._delete_repl)
+            self.repl_views[r.id] = rv
+            view.set_scratch(True)
+            view.set_name(view_id if view_id else "*REPL* [{}]".format(r.name()))
+            return rv
+        except Exception as e:
+            traceback.print_exc()
+            sublime.error_message(repr(e))
 
     def restart(self, view, edit):
         repl_restart_args = view.settings().get("repl_restart_args")
@@ -566,6 +548,18 @@ class ReplManager(object):
         if repl_id not in self.repl_views:
             return None
         del self.repl_views[repl_id]
+
+    @staticmethod
+    def expand_variables(window, kwds):
+        variables = window.extract_variables()
+        pattern = re.compile("\$(" + "|".join(variables) + ")([^a-z_]|$)")
+        if isinstance(kwds, dict):
+            for key, value in kwds.items():
+                if isinstance(value, str):
+                    kwds[key] = pattern.sub(lambda match: variables[match.group(1)], value)
+                else:
+                    kwds[key] = ReplManager.expand_variables(window, value)
+        return kwds
 
     @staticmethod
     def translate(window, obj, subst=None):
