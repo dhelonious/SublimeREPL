@@ -8,6 +8,7 @@ import re
 import os
 import sys
 import time
+import shlex
 import os.path
 import threading
 import traceback
@@ -488,9 +489,14 @@ class ReplManager(object):
 
         # get additional cmd args
         if cmd_args or cmd_args == "":
-            initial_text = cmd_args if isinstance(cmd_args, str) else ""
+            if isinstance(cmd_args, str):
+                initial_text = cmd_args
+            elif isinstance(cmd_args, list):
+                initial_text = " ".join(cmd_args)
+            else:
+                initial_text = ""
             def on_done(args):
-                kwds["cmd"] += [args]
+                kwds["cmd"] += shlex.split(args)
                 self._open(window, encoding, type, syntax, view_id, **kwds)
             window.show_input_panel("args:", initial_text, on_done, None, None)
         else:

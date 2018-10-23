@@ -213,7 +213,7 @@ A custom project-based build system may look like this::
 
 If the `cmd_args` option is set to `true` an input prompt will appear on opening
 a REPL, which can be used to pass command line arguments to the executed script.
-If `cmd_args` is set to a string, it will be used as preset.
+If `cmd_args` is set to a string or a list of strings, it will be used as preset.
 
 Frequently Asked Questions
 --------------------------
